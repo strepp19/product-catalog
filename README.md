@@ -4,7 +4,7 @@ Jednoduchá PHP aplikácia na zobrazenie produktového katalógu e-shopu s použ
 
 ## 📋 Požiadavky
 
-- PHP 7.4 alebo vyššie
+- PHP 7.3 alebo vyššie
 - MySQL 5.7 alebo vyššie
 - Web server (Apache/Nginx) alebo PHP built-in server
 
@@ -12,46 +12,29 @@ Jednoduchá PHP aplikácia na zobrazenie produktového katalógu e-shopu s použ
 
 ### 1. Vytvorenie databázy
 
-```bash
-# Prihláste sa do MySQL
-mysql -u root -p
-
-# Vytvorte databázu a naimportujte schému
-mysql -u root -p < schema.sql
-```
-
-Alebo cez phpMyAdmin:
+Cez phpMyAdmin:
 1. Otvorte phpMyAdmin
-2. Vytvorte novú databázu `product_catalog`
+2. Vytvorte novú databázu `product-catalog`
 3. Importujte súbor `schema.sql`
 
 ### 2. Konfigurácia databázového pripojenia
 
 Otvorte súbor `Database.php` a upravte prihlasovacie údaje:
-
 ```php
-private string $host = 'localhost';
-private string $dbname = 'product_catalog';
-private string $username = 'root';      // Vaše MySQL username
-private string $password = '';          // Vaše MySQL heslo
+private $host = 'localhost';
+private $dbname = 'product-catalog';
+private $username = 'root';      // Vaše MySQL username
+private $password = 'root';      // Vaše MySQL heslo
 ```
 
 ### 3. Spustenie aplikácie
 
-#### Možnosť A: PHP Built-in Server (najjednoduchšie)
+#### WAMP/XAMPP:
+Skopírujte všetky súbory do root priečinka vášho web servera (napr. `C:\wamp\www\product-catalog\`)
 
-```bash
-php -S localhost:8000
-```
-
-Potom otvorte prehliadač na `http://localhost:8000`
-
-#### Možnosť B: Apache/Nginx
-
-Skopírujte všetky súbory do root priečinka vášho web servera (napr. `htdocs`, `www`, `public_html`)
+Otvorte prehliadač: `http://localhost/product-catalog/`
 
 ## 📁 Štruktúra projektu
-
 ```
 ├── schema.sql              # Databázová schéma s ukážkovými dátami
 ├── Database.php            # Singleton trieda pre databázové pripojenie
@@ -69,7 +52,7 @@ Skopírujte všetky súbory do root priečinka vášho web servera (napr. `htdoc
 - ✅ Databáza s tabuľkou `products`
 - ✅ 5 ukážkových produktov
 - ✅ OOP triedy: `Product`, `Database`, `ProductRepository`
-- ✅ Zobrazenie produktov v prehľadnej forme
+- ✅ Zobrazenie produktov s fotkami
 - ✅ Vizuálne označenie produktov bez zásob
 - ✅ Responzívny dizajn (vlastné CSS)
 - ✅ PDO prepared statements (ochrana pred SQL injection)
@@ -80,7 +63,7 @@ Skopírujte všetky súbory do root priečinka vášho web servera (napr. `htdoc
 - ⭐ Zoradenie podľa názvu, ceny, dostupnosti, dátumu
 - ⭐ Detailná stránka produktu (`detail.php?id=X`)
 - ⭐ Moderný gradient dizajn s hover efektami
-- ⭐ Počítadlo celkového počtu produktov
+- ⭐ Produktové fotky z Unsplash
 
 ## 🔒 Bezpečnosť
 
@@ -97,54 +80,23 @@ Skopírujte všetky súbory do root priečinka vášho web servera (napr. `htdoc
 - Vizuálne odlíšenie produktov bez zásob (červená čiara, prečiarknutie)
 - Badge pre dostupnosť (zelený/červený)
 
-## 🧪 Testovanie
-
-1. Otvorte `index.php` - mali by ste vidieť 4 aktívne produkty
-2. Vyskúšajte filter "Len skladom" - zobrazí sa 3 produkty
-3. Zmeňte zoradenie na "Cena" - produkty sa preusporiadajú
-4. Kliknite na "Zobraziť detail" - otvorí sa detailná stránka
-5. Produkty bez zásob majú prečiarknutý názov a červenú farbu
-
 ## 🛠️ Technológie
 
-- **Backend**: PHP 7.4+ (čistý PHP, bez frameworku)
+- **Backend**: PHP 7.3+ (čistý PHP, bez frameworku)
 - **Database**: MySQL s PDO
-- **Frontend**: HTML5, CSS3 (vlastné, bez Bootstrapu)
+- **Frontend**: HTML5, CSS3 (vlastné)
 - **Architecture**: OOP, Repository pattern, Singleton pattern
 
-## 📊 Databázová schéma
+## 🎯 OOP Princípy
 
-```sql
-CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    sku VARCHAR(50) UNIQUE NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock_quantity INT DEFAULT 0,
-    is_active TINYINT(1) DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## 🎯 OOP Princípy použité v projekte
-
-1. **Encapsulation** - private properties s public getters/setters v `Product.php`
-2. **Singleton Pattern** - jediná inštancia databázového pripojenia v `Database.php`
-3. **Repository Pattern** - oddelenie data access logiky v `ProductRepository.php`
-4. **Type Hinting** - striktné typy parametrov a návratových hodnôt
+1. **Encapsulation** - private properties s public getters/setters
+2. **Singleton Pattern** - jediná inštancia databázového pripojenia
+3. **Repository Pattern** - oddelenie data access logiky
+4. **Type Safety** - validácia vstupných dát
 5. **Single Responsibility** - každá trieda má jednu zodpovednosť
 
 ## 📝 Poznámky
 
-- Aplikácia je pripravená na ďalšie rozšírenie (admin rozhranie, košík, objednávky)
-- Kód je komentovaný v slovenčine pre lepšiu čitateľnosť
-- Dizajn je moderný a používateľsky prívetivý
-- Všetky vstupné dáta sú validované a escapované
-
-## 👨‍💻 Autor
-
-Vytvorené ako test zadanie pre pozíciu PHP Developer
-
-## 📄 Licencia
-
-Voľne použiteľné pre študijné a testovacie účely
+- Aplikácia je kompatibilná s PHP 7.3+
+- Použité Unsplash API pre produktové fotky
+- Kód je komentovaný v slovenčine
